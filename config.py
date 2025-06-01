@@ -26,8 +26,7 @@ class Config(object):
 class Txt(object):
     START_MSG = """
 🦁 Hᴇʟʟᴏ {} !,
-I'ᴍ ᴀɴ ᴀᴜᴛᴏ Aᴘᴘʀᴏᴠᴀʟ Bᴏᴛ, a bot mainly focused on working with the new admin approval invite links.
-I can automatically approve new join requests in your channel and group.
+I'ᴍ ᴀɴ ᴀᴜᴛᴏ Aᴘᴘʀᴏᴠᴀʟ Bᴏᴛ,
 
 I ᴄᴀɴ ᴀᴘᴘʀᴏᴠᴇ ᴜsᴇʀs ɪɴ Gʀᴏᴜᴘ ᴏʀ Cʜᴀɴɴᴇʟs. Aᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀᴛ 💬
 """
