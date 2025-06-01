@@ -18,7 +18,7 @@ async def start_message(bot: Client, msg: Message):
     await msg.reply_text(
         text=Txt.START_MSG.format(msg.from_user.mention),
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton('Developer', url='https://t.me/Snowball_Official')]
+            [InlineKeyboardButton('Developer', url='https://t.me/TgMaster_Bots')]
         ])
     )
 
