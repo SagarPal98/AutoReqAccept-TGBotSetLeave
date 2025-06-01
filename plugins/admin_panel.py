@@ -134,4 +134,4 @@ async def on_member_left(bot: Client, event: ChatMemberUpdated):
                 print("Leave message is disabled.")
     except Exception as e:
         import sys
-        print('Error on line {}:'.format(sys.ex
+        print('Error on line {}:'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
