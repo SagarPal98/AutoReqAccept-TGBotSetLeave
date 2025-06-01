@@ -20,9 +20,15 @@ class Config(object):
     LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", "")) # ⚠️ Required
     APPROVED_WELCOME_TEXT = os.environ.get("APPROVED_WELCOME_TEXT", "Hello {mention}\nWelcome To {title}\n\nYou're Auto Approved. ✅")
     LEAVING_BY_TEXT = os.environ.get("APPROVED_WELCOME_TEXT", "👋 Bye {mention} !\nSee You Soon by {title}\n\nYou Left. ⛔")
-    FORCE_SUB = os.environ.get('FORCE_SUB', '') # ⚠️ Required
-    AUTH_CHANNEL = int(FORCE_SUB) if FORCE_SUB and id_pattern.search(
-    FORCE_SUB) else None 
+   if FORCE_SUB:
+    if FORCE_SUB.startswith("-100") and FORCE_SUB[1:].isdigit():
+        AUTH_CHANNEL = int(FORCE_SUB)
+    elif FORCE_SUB.startswith("@"):
+        AUTH_CHANNEL = FORCE_SUB
+    else:
+        AUTH_CHANNEL = None
+else:
+    AUTH_CHANNEL = None
 
     # Web response configuration
     WEBHOOK = bool(os.environ.get("WEBHOOK", True))
