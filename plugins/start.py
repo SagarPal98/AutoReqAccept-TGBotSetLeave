@@ -82,4 +82,13 @@ async def set_approve_msg(bot: Client, msg: Message):
 @Client.on_message(filters.private & filters.command('set_leavemsg') & filters.user(Config.OWNER))
 async def set_leave_msg(bot: Client, msg: Message):
     if msg.reply_to_message:
-        ms = await msg.reply_te_
+        ms = await msg.reply_text("Please Wait...")
+        await db.set_leave_msg(msg.from_user.id, msg.reply_to_message.text)
+        await ms.edit("**Successfully Added ✅**")
+        await asyncio.sleep(3)
+        await ms.delete()
+    else:
+        await msg.reply_text(
+            "Reply to a message.\nSupports only text and HTML format.\n\n"
+            "Example:\n`Goodbye {mention}, we will miss you at {title}!`"
+        )
