@@ -122,8 +122,8 @@ async def on_member_left(bot: Client, event: ChatMemberUpdated):
         # Detect if the user has left or was removed
         if old_status in ["member", "administrator"] and new_status in ["left", "kicked"]:
             # Check if leave message is enabled for the chat
-            if await db.get_bool_leave_msg(chat.id):
-                leavemsg = await db.get_leave_msg(chat.id) or Config.LEAVING_BY_TEXT
+            if await db.get_bool_leave_msg(Config.OWNER):  
+                leavemsg = await db.get_leave_msg(Config.OWNER) or Config.LEAVING_BY_TEXT
 
                 # Send the leave message to the chat
                 await bot.send_message(
@@ -134,4 +134,4 @@ async def on_member_left(bot: Client, event: ChatMemberUpdated):
                 print("Leave message is disabled.")
     except Exception as e:
         import sys
-        print('Error on line {}:'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
+        print('Error on line {}:'.format(sys.ex
