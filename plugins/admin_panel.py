@@ -117,16 +117,11 @@ async def on_member_left(bot: Client, event: ChatMemberUpdated):
         chat = event.chat
         old_status = event.old_chat_member.status
         new_status = event.new_chat_member.status
-        user = event.from_user
+        user = event.old_chat_member.user
 
-        # Detect if the user has left or was removed
         if old_status in ["member", "administrator"] and new_status in ["left", "kicked"]:
-            # Check if leave message is enabled for the chat
             if await db.get_bool_leave_msg(chat.id):
                 leavemsg = await db.get_leave_msg(chat.id) or Config.LEAVING_BY_TEXT
-
-
-                # Send the leave message to the chat
                 await bot.send_message(
                     chat.id,
                     leavemsg.format(mention=user.mention, title=chat.title)
