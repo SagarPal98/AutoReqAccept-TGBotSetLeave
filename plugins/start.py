@@ -15,12 +15,26 @@ btn3 = InlineKeyboardButton('❌ Leaving Message Off', callback_data='leavingmsg
 async def start_message(bot: Client, msg: Message):
     user = msg.from_user
     await db.add_user(bot, user)
+
+    bot_username = (await bot.get_me()).username  # Get bot username dynamically
+
     await msg.reply_text(
-        text=Txt.START_MSG.format(msg.from_user.mention),
+        text=Txt.START_MSG.format(user.mention),
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton('Developer', url='https://t.me/TgMaster_Bots')]
+            [InlineKeyboardButton('👨‍💻 Developer', url='https://t.me/TgMaster_Bots')],
+            [
+                InlineKeyboardButton(
+                    '➕ 𝖠𝖽𝖽 𝖳𝗈 𝖢𝗁𝖺𝗇𝗇𝖾𝗅',
+                    url=f'https://t.me/{bot_username}?startchannel=true&admin=invite_users+manage_chat+delete_messages+restrict_members'
+                ),
+                InlineKeyboardButton(
+                    '👥 𝖠𝖽𝖽 𝖳𝗈 𝖦𝗋𝗈𝗎𝗉',
+                    url=f'https://t.me/{bot_username}?startgroup=true&admin=invite_users+manage_chat+delete_messages+restrict_members'
+                )
+            ]
         ])
     )
+
 
 
 @Client.on_message(filters.private & filters.command(['setting', 'config']) & filters.user(Config.OWNER))
