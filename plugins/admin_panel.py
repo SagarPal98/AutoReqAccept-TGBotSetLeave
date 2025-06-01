@@ -110,18 +110,30 @@ async def auto_accept(bot: Client, cmd: ChatJoinRequest):
         print('Error on line {}:'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
 
 
-@Client.on_chat_member_updated()
-async def on_member_left(bot: Client, cmd: ChatMemberUpdated):
-    try:
-        chat = cmd.chat
-        user = cmd.from_user
 
-        # If user has left or been kicked
-        if cmd.new_chat_member.status == "left":
-            if await db.get_bool_leave_msg(Config.OWNER):
-                leavemsg = await db.get_leave_msg(Config.OWNER) or Config.LEAVING_BY_TEXT
-                await bot.send_message(user.id, leavemsg.format(mention=user.mention, title=chat.title))
+@Client.on_chat_member_updated()
+async def on_member_left(bot: Client, event: ChatMemberUpdated):
+    try:
+        # User who left or was kicked
+        user = event.old_chat_member.user
+        
+        # Chat where the event happened
+        chat = event.chat
+
+        # Check if the new status is 'left' or 'kicked'
+        if event.new_chat_member.status in ["left", "kicked"]:
+            # Check if leave message is enabled for the chat or user
+            # Use chat.id or user.id depending on your design (usually chat.id)
+            if await db.get_bool_leave_msg(chat.id):  
+                leavemsg = await db.get_leave_msg(chat.id) or Config.LEAVING_BY_TEXT
+
+                # Send the leave message to the chat, mentioning the user who left
+                await bot.send_message(
+                    chat.id, 
+                    leavemsg.format(mention=user.mention, title=chat.title)
+                )
             else:
                 print("Leave message is disabled.")
     except Exception as e:
+        import sys
         print('Error on line {}:'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
