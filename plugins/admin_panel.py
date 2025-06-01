@@ -115,23 +115,23 @@ async def auto_accept(bot: Client, cmd: ChatJoinRequest):
 async def on_member_left(bot: Client, event: ChatMemberUpdated):
     try:
         chat = event.chat
-        user = event.new_chat_member.user  # Correct user object
+        old_status = event.old_chat_member.status
+        new_status = event.new_chat_member.status
+        user = event.from_user
 
-        # Check if the user left or was kicked
-        if event.old_chat_member.status in ["member", "administrator"] and event.new_chat_member.status in ["left", "kicked"]:
-            
-            # Check if leave message is enabled (by OWNER ID, not chat)
-            if await db.get_bool_leave_msg(Config.OWNER):
-                leavemsg = await db.get_leave_msg(Config.OWNER) or Config.LEAVING_BY_TEXT
+        # Detect if the user has left or was removed
+        if old_status in ["member", "administrator"] and new_status in ["left", "kicked"]:
+            # Check if leave message is enabled for the chat
+            if await db.get_bool_leave_msg(chat.id):
+                leavemsg = await db.get_leave_msg(chat.id) or Config.LEAVING_BY_TEXT
 
-                # Send message in the chat (since the user has left)
+                # Send the leave message to the chat
                 await bot.send_message(
                     chat.id,
                     leavemsg.format(mention=user.mention, title=chat.title)
                 )
             else:
                 print("Leave message is disabled.")
-
     except Exception as e:
         import sys
         print('Error on line {}:'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
